@@ -21,9 +21,19 @@ body {
     color: white;
     font-size: 36px;
     font-weight: bold;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     letter-spacing: 1px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
 .flapper {
@@ -136,6 +146,38 @@ button:disabled {
     margin-top: 20px;
 }
 
+/* Company link styles */
+.company-link {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.link-text {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.link-url {
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.link-url:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
 /* Media queries for smaller screens */
 @media (max-width: 768px) {
     .wheel-container {
@@ -144,7 +186,7 @@ button:disabled {
     
     .welcome-text {
         font-size: 28px;
-        margin-bottom: 20px;
+        margin-bottom: 50px;
     }
     
     canvas {
@@ -167,12 +209,21 @@ button:disabled {
     .modal-content h3 {
         font-size: 18px;
     }
+    
+    .link-text {
+        font-size: 16px;
+    }
+    
+    .link-url {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
 }
 
 @media (max-width: 480px) {
     .welcome-text {
         font-size: 22px;
-        margin-bottom: 15px;
+        margin-bottom: 40px;
     }
     
     canvas {
@@ -194,5 +245,14 @@ button:disabled {
     
     .modal-content h3 {
         font-size: 16px;
+    }
+    
+    .link-text {
+        font-size: 14px;
+    }
+    
+    .link-url {
+        font-size: 12px;
+        padding: 5px 10px;
     }
 }
