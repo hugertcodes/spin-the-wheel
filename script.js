@@ -7,15 +7,18 @@ const prizes = [
     "Sugar Scrubs 50% OFF!",
     "Body Massage Oil 50% OFF!",
     "Jojoba Beard Balm 40% OFF!",
-    "Free Gift Basket!",
+    "Free Soap Gift Basket",
     "Hair Care 30% OFF!",
-    "Face Cream 25% OFF!",
+    "Bakuchiol Face Cream $20 OFF!",
     "Essential Oils 40% OFF!",
     "Lip Balm 20% OFF!",
-    "Nail Polish 35% OFF!",
-    "Perfume 45% OFF!",
-    "Soap Set 30% OFF!",
-    "Shampoo 25% OFF!"
+    "Oops...",
+    "Try Again🙁",
+    "$5 OFF!",
+    "Shampoo 25% OFF!",
+    "Face Mask $10 OFF!",
+    "Try Again🙁",
+    "Free Bath Salt"
 ];
 
 const numberOfSlices = prizes.length;
@@ -56,7 +59,12 @@ function drawWheel() {
         ctx.rotate(sliceAngle * i + sliceAngle / 2);
         ctx.textAlign = "center";
         ctx.fillStyle = "#fff";
-        ctx.font = "bold 11px Arial";
+        // Make certain labels slimmer
+        if (prizes[i] === "Free Soap Gift Basket" || prizes[i] === "Free Bath Salt") {
+            ctx.font = "bold 9px Arial";
+        } else {
+            ctx.font = "bold 11px Arial";
+        }
         ctx.fillText(prizes[i], 150, 5);
         ctx.restore();
     }
@@ -129,6 +137,9 @@ function triggerConfetti() {
 
 // Show prize modal from PR #3
 function showPrizeModal(prize) {
+    // Trigger confetti effect first
+    triggerConfetti();
+    
     const modal = document.createElement('div');
     modal.id = 'prize-modal';
     
@@ -157,9 +168,6 @@ function showPrizeModal(prize) {
     modal.appendChild(modalContent);
     
     document.body.appendChild(modal);
-    
-    // Trigger confetti effect
-    triggerConfetti();
 }
 
 // Spin functionality with easing from PR #2 and prize display from PR #3
