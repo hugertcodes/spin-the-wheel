@@ -7,6 +7,18 @@ const prizeLabels = ["Prize 1", "Prize 2", "Prize 3", "Prize 4", "Prize 5", "Pri
 let angle = 0;
 let isSpinning = false;
 
+// Confetti configuration constants
+const CONFETTI_ORIGIN_LEFT_MIN = 0.1;
+const CONFETTI_ORIGIN_LEFT_MAX = 0.3;
+const CONFETTI_ORIGIN_RIGHT_MIN = 0.7;
+const CONFETTI_ORIGIN_RIGHT_MAX = 0.9;
+const CONFETTI_ORIGIN_Y_OFFSET = -0.2;
+
+// Easing function for smooth animation
+function easeOutCubic(t) {
+    return 1 - Math.pow(1 - t, 3);
+}
+
 // Draw the wheel
 function drawWheel() {
     const sliceAngle = (2 * Math.PI) / numberOfSlices;
@@ -89,12 +101,12 @@ function triggerConfetti() {
         confetti({
             ...defaults,
             particleCount,
-            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+            origin: { x: randomInRange(CONFETTI_ORIGIN_LEFT_MIN, CONFETTI_ORIGIN_LEFT_MAX), y: Math.random() + CONFETTI_ORIGIN_Y_OFFSET }
         });
         confetti({
             ...defaults,
             particleCount,
-            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+            origin: { x: randomInRange(CONFETTI_ORIGIN_RIGHT_MIN, CONFETTI_ORIGIN_RIGHT_MAX), y: Math.random() + CONFETTI_ORIGIN_Y_OFFSET }
         });
     }, 250);
 }
@@ -115,10 +127,6 @@ spinButton.addEventListener("click", () => {
     const startAngle = angle;
     const duration = 4000; // 4 seconds
     const startTime = Date.now();
-    
-    function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-    }
     
     function animate() {
         const currentTime = Date.now();
