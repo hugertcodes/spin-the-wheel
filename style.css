@@ -61,7 +61,7 @@ button:active {
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
+    transform: none !important;
 }
 
 /* Responsive design */

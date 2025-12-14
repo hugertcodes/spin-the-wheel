@@ -62,6 +62,12 @@ function getPrizeIndex(finalAngle) {
 
 // Trigger confetti effect
 function triggerConfetti() {
+    // Check if confetti library is available
+    if (typeof confetti !== 'function') {
+        console.warn('Confetti library not loaded');
+        return;
+    }
+    
     const duration = 3000;
     const animationEnd = Date.now() + duration;
     const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
@@ -144,7 +150,10 @@ spinButton.addEventListener("click", () => {
             
             // Show result with a slight delay
             setTimeout(() => {
-                alert(`Congratulations! You won: ${prizeLabels[prizeIndex]}`);
+                const message = `Congratulations! You won: ${prizeLabels[prizeIndex]}`;
+                // For better UX, log to console. In production, this could be a custom modal.
+                console.log(message);
+                alert(message);
                 isSpinning = false;
                 spinButton.disabled = false;
             }, 500);
