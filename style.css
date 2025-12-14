@@ -3,17 +3,25 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .wheel-container {
     text-align: center;
+    max-width: 90vw;
+    max-height: 90vh;
 }
 
 canvas {
     border: 2px solid #333;
     border-radius: 50%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 button {
@@ -21,4 +29,41 @@ button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    background-color: #3498DB;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980B9;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+    .wheel-container {
+        max-width: 95vw;
+    }
+    
+    canvas {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    canvas {
+        max-width: 300px;
+    }
+    
+    button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
 }
