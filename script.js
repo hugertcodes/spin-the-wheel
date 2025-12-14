@@ -49,9 +49,8 @@ function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
 }
 
-// Draw the wheel
-function drawWheel() {
-    // Calculate cumulative angles for weighted slices
+// Calculate slice angles based on weights
+function calculateSliceAngles() {
     const sliceAngles = [];
     let cumulativeAngle = 0;
     
@@ -65,6 +64,13 @@ function drawWheel() {
         });
         cumulativeAngle += sliceAngle;
     }
+    
+    return sliceAngles;
+}
+
+// Draw the wheel
+function drawWheel() {
+    const sliceAngles = calculateSliceAngles();
     
     for (let i = 0; i < numberOfSlices; i++) {
         // Draw slice
@@ -109,21 +115,17 @@ function getPrizeIndex(finalAngle) {
     // Normalize angle to 0-2π radians
     const normalizedAngle = ((finalAngle * Math.PI / 180) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
     
-    // Calculate cumulative angles for weighted slices
-    let cumulativeAngle = 0;
+    // Get slice angles
+    const sliceAngles = calculateSliceAngles();
+    
+    // The flapper points at the top (0/12 o'clock position)
+    // Adjust for wheel rotation direction (counter-clockwise in our coordinate system)
+    const flapperPosition = (2 * Math.PI - normalizedAngle + Math.PI / 2) % (2 * Math.PI);
+    
     for (let i = 0; i < numberOfSlices; i++) {
-        const normalizedWeight = sliceWeights[i] / totalWeight;
-        const sliceAngle = normalizedWeight * 2 * Math.PI;
-        
-        // The flapper points at the top (12 o'clock position = 3π/2 when starting from right)
-        // Adjust for wheel rotation direction
-        const flapperPosition = (2 * Math.PI - normalizedAngle + Math.PI / 2) % (2 * Math.PI);
-        
-        if (flapperPosition >= cumulativeAngle && flapperPosition < cumulativeAngle + sliceAngle) {
+        if (flapperPosition >= sliceAngles[i].start && flapperPosition < sliceAngles[i].end) {
             return i;
         }
-        
-        cumulativeAngle += sliceAngle;
     }
     
     return 0; // Fallback
