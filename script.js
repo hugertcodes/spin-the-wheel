@@ -14,12 +14,18 @@ let angle = 0;
 
 // Draw the wheel
 function drawWheel() {
+    const centerX = wheel.width / 2;
+    const centerY = wheel.height / 2;
+    const radius = Math.min(centerX, centerY);
     const sliceAngle = (2 * Math.PI) / numberOfSlices;
+    const fontSize = Math.floor(radius / 14);
+    const textRadius = radius * 0.6;
+    
     for (let i = 0; i < numberOfSlices; i++) {
         // Draw slice
         ctx.beginPath();
-        ctx.moveTo(250, 250);
-        ctx.arc(250, 250, 250, sliceAngle * i, sliceAngle * (i + 1));
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, sliceAngle * i, sliceAngle * (i + 1));
         ctx.closePath();
         ctx.fillStyle = sliceColors[i % sliceColors.length];
         ctx.fill();
@@ -27,26 +33,28 @@ function drawWheel() {
 
         // Draw text
         ctx.save();
-        ctx.translate(250, 250);
+        ctx.translate(centerX, centerY);
         ctx.rotate(sliceAngle * i + sliceAngle / 2);
         ctx.textAlign = "center";
         ctx.fillStyle = "#000";
-        ctx.font = "bold 18px Arial, sans-serif";
-        ctx.fillText(prizes[i], 150, 10);
+        ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+        ctx.fillText(prizes[i], textRadius, fontSize / 3);
         ctx.restore();
     }
 }
 
 // Spin functionality
 spinButton.addEventListener("click", () => {
+    const centerX = wheel.width / 2;
+    const centerY = wheel.height / 2;
     let spinAngle = Math.random() * 5000 + 2000; // Random spin duration
     const spinInterval = setInterval(() => {
         angle += 10;
         ctx.clearRect(0, 0, wheel.width, wheel.height);
         ctx.save();
-        ctx.translate(250, 250);
+        ctx.translate(centerX, centerY);
         ctx.rotate((angle * Math.PI) / 180);
-        ctx.translate(-250, -250);
+        ctx.translate(-centerX, -centerY);
         drawWheel();
         ctx.restore();
     }, 30);
