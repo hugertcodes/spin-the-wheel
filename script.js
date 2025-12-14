@@ -56,9 +56,6 @@ function drawWheel() {
     ctx.strokeStyle = "#333";
     ctx.lineWidth = 2;
     ctx.stroke();
-    
-    // Draw flapper/indicator at top
-    drawFlapper();
 }
 
 // Draw flapper (indicator)
@@ -82,10 +79,16 @@ function createConfetti() {
     const duration = 3000;
     const animationEnd = Date.now() + duration;
     const colors = ['#FF5733', '#33FF57', '#5733FF', '#F1C40F', '#1ABC9C'];
+    const maxConfettiCount = 50;
+    let confettiCount = 0;
 
     (function frame() {
+        if (confettiCount >= maxConfettiCount) {
+            return;
+        }
+        
         const confetti = [];
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5 && confettiCount < maxConfettiCount; i++) {
             confetti.push({
                 x: Math.random() * window.innerWidth,
                 y: -10,
@@ -93,6 +96,7 @@ function createConfetti() {
                 size: Math.random() * 5 + 5,
                 speedY: Math.random() * 3 + 2
             });
+            confettiCount++;
         }
 
         confetti.forEach(c => {
@@ -136,14 +140,29 @@ function getWinningPrize(finalAngle) {
 function showPrizeModal(prize) {
     const modal = document.createElement('div');
     modal.id = 'prize-modal';
-    modal.innerHTML = `
-        <div class="modal-content">
-            <h2>🎉 Congratulations! 🎉</h2>
-            <p>You won:</p>
-            <h3>${prize}</h3>
-            <button onclick="document.getElementById('prize-modal').remove()">Close</button>
-        </div>
-    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    
+    const heading = document.createElement('h2');
+    heading.textContent = '🎉 Congratulations! 🎉';
+    
+    const text = document.createElement('p');
+    text.textContent = 'You won:';
+    
+    const prizeText = document.createElement('h3');
+    prizeText.textContent = prize;
+    
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.addEventListener('click', () => modal.remove());
+    
+    modalContent.appendChild(heading);
+    modalContent.appendChild(text);
+    modalContent.appendChild(prizeText);
+    modalContent.appendChild(closeButton);
+    modal.appendChild(modalContent);
+    
     document.body.appendChild(modal);
     createConfetti();
 }
@@ -186,10 +205,11 @@ spinButton.addEventListener("click", () => {
         drawWheel();
         ctx.restore();
         
-        // Redraw flapper on top
+        // Draw flapper on top after wheel rotation
         drawFlapper();
     }, 30);
 });
 
 // Initial wheel drawing
 drawWheel();
+drawFlapper();
