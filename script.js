@@ -130,7 +130,9 @@ function createConfetti() {
 
 // Get winning prize based on final angle
 function getWinningPrize(finalAngle) {
+    // All angles are in degrees for prize calculation
     const sliceAngle = 360 / numberOfSlices;
+    // Normalize angle to 0-360 range and invert direction (clockwise)
     const normalizedAngle = (360 - (finalAngle % 360)) % 360;
     const winningIndex = Math.floor(normalizedAngle / sliceAngle) % numberOfSlices;
     return prizes[winningIndex];
@@ -155,7 +157,10 @@ function showPrizeModal(prize) {
     
     const closeButton = document.createElement('button');
     closeButton.textContent = 'Close';
-    closeButton.addEventListener('click', () => modal.remove());
+    closeButton.addEventListener('click', () => {
+        modal.remove();
+        // Note: Confetti animation is time-bound (3 seconds) and will clean up automatically
+    });
     
     modalContent.appendChild(heading);
     modalContent.appendChild(text);
