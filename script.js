@@ -10,6 +10,9 @@ const prizes = [
 ];
 const numberOfSlices = 5;
 const sliceColors = ["#FF5733", "#33FF57", "#5733FF", "#F1C40F", "#1ABC9C"];
+const FONT_SIZE_DIVISOR = 14;
+const TEXT_POSITION_RATIO = 0.6;
+const TEXT_VERTICAL_OFFSET_DIVISOR = 3;
 let angle = 0;
 
 // Draw the wheel
@@ -18,8 +21,8 @@ function drawWheel() {
     const centerY = wheel.height / 2;
     const radius = Math.min(centerX, centerY);
     const sliceAngle = (2 * Math.PI) / numberOfSlices;
-    const fontSize = Math.floor(radius / 14);
-    const textRadius = radius * 0.6;
+    const fontSize = Math.floor(radius / FONT_SIZE_DIVISOR);
+    const textRadius = radius * TEXT_POSITION_RATIO;
     
     for (let i = 0; i < numberOfSlices; i++) {
         // Draw slice
@@ -38,7 +41,7 @@ function drawWheel() {
         ctx.textAlign = "center";
         ctx.fillStyle = "#000";
         ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-        ctx.fillText(prizes[i], textRadius, fontSize / 3);
+        ctx.fillText(prizes[i], textRadius, fontSize / TEXT_VERTICAL_OFFSET_DIVISOR);
         ctx.restore();
     }
 }
