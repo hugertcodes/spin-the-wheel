@@ -38,14 +38,14 @@ body {
 
 .flapper {
     position: absolute;
-    top: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
     width: 0;
     height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
-    border-top: 40px solid #ff3333;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    border-left: 24px solid #ff3333;
     z-index: 10;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
@@ -195,10 +195,10 @@ button:disabled {
     }
     
     .flapper {
-        top: 40px;
-        border-left: 15px solid transparent;
-        border-right: 15px solid transparent;
-        border-top: 30px solid #ff3333;
+        right: -15px;
+        border-top: 9px solid transparent;
+        border-bottom: 9px solid transparent;
+        border-left: 18px solid #ff3333;
     }
     
     button {
