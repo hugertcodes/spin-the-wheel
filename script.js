@@ -129,6 +129,8 @@ function triggerChristmasEmojiRain() {
     const emojis = ['🎄', '🎅', '⛄', '🎁', '❄️', '🔔', '⭐', '🕯️'];
     const duration = 3000;
     const emojiCount = 30;
+    const maxAnimationTime = 4000; // Maximum fall animation time (2s + 2s from random)
+    const cleanupTime = maxAnimationTime + 500; // Add buffer for cleanup
     
     for (let i = 0; i < emojiCount; i++) {
         setTimeout(() => {
@@ -144,9 +146,10 @@ function triggerChristmasEmojiRain() {
             
             document.body.appendChild(emoji);
             
+            // Remove after animation completes with buffer
             setTimeout(() => {
                 emoji.remove();
-            }, 4000);
+            }, cleanupTime);
         }, Math.random() * duration);
     }
 }
