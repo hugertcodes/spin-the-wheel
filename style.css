@@ -38,9 +38,9 @@ body {
 
 .flapper {
     position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    right: -10px;
+    transform: translateY(-50%) rotate(90deg);
     width: 0;
     height: 0;
     border-left: 20px solid transparent;
@@ -154,15 +154,16 @@ button:disabled {
 
 .link-text {
     color: white;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
+    margin-top: 10px;
     margin-bottom: 5px;
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .link-url {
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     text-decoration: none;
     background: rgba(255, 255, 255, 0.2);
     padding: 8px 16px;
@@ -195,7 +196,9 @@ button:disabled {
     }
     
     .flapper {
-        top: -8px;
+        top: 50%;
+        right: -8px;
+        transform: translateY(-50%) rotate(90deg);
         border-left: 15px solid transparent;
         border-right: 15px solid transparent;
         border-top: 30px solid #ff3333;
@@ -211,11 +214,11 @@ button:disabled {
     }
     
     .link-text {
-        font-size: 16px;
+        font-size: 14px;
     }
     
     .link-url {
-        font-size: 14px;
+        font-size: 12px;
         padding: 6px 12px;
     }
 }
@@ -248,11 +251,11 @@ button:disabled {
     }
     
     .link-text {
-        font-size: 14px;
+        font-size: 12px;
     }
     
     .link-url {
-        font-size: 12px;
+        font-size: 10px;
         padding: 5px 10px;
     }
 }

@@ -118,9 +118,9 @@ function getPrizeIndex(finalAngle) {
     // Get slice angles
     const sliceAngles = calculateSliceAngles();
     
-    // The flapper points at the top (0/12 o'clock position)
+    // The flapper points at the right side (3 o'clock position)
     // Adjust for wheel rotation direction (counter-clockwise in our coordinate system)
-    const flapperPosition = (2 * Math.PI - normalizedAngle + Math.PI / 2) % (2 * Math.PI);
+    const flapperPosition = (2 * Math.PI - normalizedAngle) % (2 * Math.PI);
     
     for (let i = 0; i < numberOfSlices; i++) {
         if (flapperPosition >= sliceAngles[i].start && flapperPosition < sliceAngles[i].end) {
