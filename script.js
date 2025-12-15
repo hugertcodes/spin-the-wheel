@@ -2,8 +2,8 @@ const wheel = document.getElementById("wheel");
 const spinButton = document.getElementById("spin-button");
 const ctx = wheel.getContext("2d");
 
-// Prize definitions from PR #3 - scrambled order
-const prizes = [
+// Prize definitions - will be scrambled
+const basePrizes = [
     "Free Bath Salt",
     "Sugar Scrubs 50% OFF!",
     "$5 OFF!",
@@ -20,6 +20,68 @@ const prizes = [
     "Hair Care 30% OFF!",
     "Jojoba Beard Balm 40% OFF!"
 ];
+
+// Function to scramble prizes with Free Bath Salt and Free Soap from Basket on opposite sides
+function scramblePrizes(prizesArray) {
+    const totalSlices = prizesArray.length;
+    const halfWay = Math.floor(totalSlices / 2);
+    
+    // Separate the two special prizes from the rest
+    const bathSalt = "Free Bath Salt";
+    const soapBasket = "Free Soap from Basket";
+    const otherPrizes = prizesArray.filter(p => p !== bathSalt && p !== soapBasket);
+    
+    // Verify we have the expected prizes
+    if (otherPrizes.length !== totalSlices - 2) {
+        console.error(`Warning: Expected 2 special prizes but found ${totalSlices - otherPrizes.length}`);
+        return prizesArray; // Return original array if something is wrong
+    }
+    
+    // Shuffle the other prizes using Fisher-Yates algorithm
+    for (let i = otherPrizes.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [otherPrizes[i], otherPrizes[j]] = [otherPrizes[j], otherPrizes[i]];
+    }
+    
+    // Place Free Bath Salt at a random position in the first half
+    const bathSaltPos = Math.floor(Math.random() * halfWay);
+    
+    // Place Free Soap from Basket on the opposite side
+    // Opposite side means approximately halfWay positions away
+    // Use modulo to ensure it wraps within bounds
+    const soapBasketPos = (bathSaltPos + halfWay) % totalSlices;
+    
+    // Build the final array
+    const scrambled = [];
+    let otherIndex = 0;
+    
+    for (let i = 0; i < totalSlices; i++) {
+        if (i === bathSaltPos) {
+            scrambled.push(bathSalt);
+        } else if (i === soapBasketPos) {
+            scrambled.push(soapBasket);
+        } else {
+            // Safety check: ensure we don't exceed array bounds
+            if (otherIndex >= otherPrizes.length) {
+                console.error(`Error: otherIndex ${otherIndex} exceeds array length ${otherPrizes.length}`);
+                return prizesArray;
+            }
+            scrambled.push(otherPrizes[otherIndex]);
+            otherIndex++;
+        }
+    }
+    
+    // Validate result
+    if (scrambled.length !== totalSlices) {
+        console.error(`Error: Scrambled array has ${scrambled.length} items instead of ${totalSlices}`);
+        return prizesArray; // Return original array if something went wrong
+    }
+    
+    return scrambled;
+}
+
+// Scramble prizes at initialization
+const prizes = scramblePrizes(basePrizes);
 
 // Define slice weight multipliers (slimmer slices have smaller values)
 const sliceWeights = prizes.map(prize => {
