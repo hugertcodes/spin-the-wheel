@@ -329,7 +329,7 @@ function showPrizeModal(prize) {
 }
 
 // Spin functionality with easing from PR #2 and prize display from PR #3
-spinButton.addEventListener("click", () => {
+function handleSpinClick() {
     if (isSpinning || spinButton.disabled) return;
     
     isSpinning = true;
@@ -379,13 +379,17 @@ spinButton.addEventListener("click", () => {
     }
     
     animate();
-});
+}
+
+// Remove any existing listener before adding to prevent duplicates
+spinButton.removeEventListener("click", handleSpinClick);
+spinButton.addEventListener("click", handleSpinClick);
 
 // Initial wheel drawing
 drawWheel();
 
 // Spin Again button handler
-spinAgainButton.addEventListener("click", () => {
+function handleSpinAgainClick() {
     // Reset all states and animations
     // 1. Hide spin again button and online purchase link
     spinAgainButton.classList.remove('visible');
@@ -408,4 +412,8 @@ spinAgainButton.addEventListener("click", () => {
     // 6. Re-enable spin button
     isSpinning = false;
     spinButton.disabled = false;
-});
+}
+
+// Remove any existing listener before adding to prevent duplicates
+spinAgainButton.removeEventListener("click", handleSpinAgainClick);
+spinAgainButton.addEventListener("click", handleSpinAgainClick);
