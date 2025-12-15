@@ -24,13 +24,12 @@ body {
 }
 
 .welcome-text {
-    color: white;
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 60px;
     text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     letter-spacing: 1px;
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse 2s ease-in-out infinite, colorChange 3s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -39,6 +38,21 @@ body {
     }
     50% {
         transform: scale(1.05);
+    }
+}
+
+@keyframes colorChange {
+    0% {
+        color: #ff0000; /* Red */
+    }
+    33% {
+        color: #00ff00; /* Green */
+    }
+    66% {
+        color: #ffff00; /* Yellow */
+    }
+    100% {
+        color: #ff0000; /* Red */
     }
 }
 
@@ -90,7 +104,7 @@ body {
 
 .flapper {
     position: absolute;
-    top: 52%;
+    top: 50%;
     right: -20px;
     transform: translateY(-50%);
     font-size: 40px;
@@ -259,6 +273,43 @@ button:disabled {
 #spin-again-button.visible {
     opacity: 1;
     pointer-events: auto;
+}
+
+/* Online Purchase link styles */
+#online-purchase-link {
+    position: fixed;
+    top: calc(60% - 60px);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    z-index: 10;
+}
+
+#online-purchase-link.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#online-purchase-link a {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 25px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#online-purchase-link a:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Media queries for smaller screens */
