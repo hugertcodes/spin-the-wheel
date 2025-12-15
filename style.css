@@ -160,6 +160,7 @@ button:disabled {
     margin-top: 30px;
     text-align: center;
     transition: all 1s ease;
+    position: relative;
 }
 
 .company-link.enlarged {
