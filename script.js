@@ -181,7 +181,7 @@ function showPrizeModal(prize) {
     const heading = document.createElement('h2');
     // Check if the prize is "Oops..." for special message
     if (prize === "Oops...") {
-        heading.textContent = '😦 Maybe Next Time🥺 😦';
+        heading.textContent = 'Maybe Next Time🥺';
     } else {
         heading.textContent = '🎉 Congratulations! 🎉';
     }
