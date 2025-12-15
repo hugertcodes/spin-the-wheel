@@ -33,7 +33,7 @@ function scramblePrizes(prizesArray) {
     
     // Verify we have the expected prizes
     if (otherPrizes.length !== totalSlices - 2) {
-        console.error("Warning: Special prizes not found in array");
+        console.error(`Warning: Expected 2 special prizes but found ${totalSlices - otherPrizes.length}`);
         return prizesArray; // Return original array if something is wrong
     }
     
@@ -61,11 +61,15 @@ function scramblePrizes(prizesArray) {
         } else if (i === soapBasketPos) {
             scrambled.push(soapBasket);
         } else {
-            if (otherIndex < otherPrizes.length) {
-                scrambled.push(otherPrizes[otherIndex]);
-                otherIndex++;
-            }
+            scrambled.push(otherPrizes[otherIndex]);
+            otherIndex++;
         }
+    }
+    
+    // Validate result
+    if (scrambled.length !== totalSlices) {
+        console.error(`Error: Scrambled array has ${scrambled.length} items instead of ${totalSlices}`);
+        return prizesArray; // Return original array if something went wrong
     }
     
     return scrambled;
