@@ -2,28 +2,28 @@ const wheel = document.getElementById("wheel");
 const spinButton = document.getElementById("spin-button");
 const ctx = wheel.getContext("2d");
 
-// Prize definitions from PR #3
+// Prize definitions from PR #3 - scrambled order
 const prizes = [
+    "Free Bath Salt",
     "Sugar Scrubs 50% OFF!",
-    "Body Massage Oil 50% OFF!",
-    "Jojoba Beard Balm 40% OFF!",
-    "Free Soap from Basket",
-    "Hair Care 30% OFF!",
-    "Bakuchiol Face Cream $20 OFF!",
-    "Essential Oils 40% OFF!",
-    "Lip Balm 20% OFF!",
-    "Oops...",
-    "Try Again🙁",
     "$5 OFF!",
+    "Try Again🙁",
+    "Essential Oils 40% OFF!",
+    "Free Soap from Basket",
     "Shampoo 25% OFF!",
+    "Oops...",
+    "Body Massage Oil 50% OFF!",
     "Face Mask $10 OFF!",
     "Try Again🙁",
-    "Free Bath Salt"
+    "Bakuchiol Face Cream $20 OFF!",
+    "Lip Balm 20% OFF!",
+    "Hair Care 30% OFF!",
+    "Jojoba Beard Balm 40% OFF!"
 ];
 
 // Define slice weight multipliers (slimmer slices have smaller values)
 const sliceWeights = prizes.map(prize => {
-    if (prize === "Free Soap Gift Basket" || prize === "Free Bath Salt") {
+    if (prize === "Free Soap from Basket" || prize === "Free Bath Salt") {
         return 0.6; // 60% of normal size
     }
     return 1.0; // Normal size
@@ -36,13 +36,6 @@ const numberOfSlices = prizes.length;
 const sliceColors = ["#FF5733", "#33FF57", "#5733FF", "#F1C40F", "#1ABC9C", "#E74C3C", "#9B59B6", "#3498DB", "#FF6B9D", "#FFA500", "#20B2AA", "#9370DB"];
 let angle = 0;
 let isSpinning = false;
-
-// Confetti configuration constants from PR #2
-const CONFETTI_ORIGIN_LEFT_MIN = 0.1;
-const CONFETTI_ORIGIN_LEFT_MAX = 0.3;
-const CONFETTI_ORIGIN_RIGHT_MIN = 0.7;
-const CONFETTI_ORIGIN_RIGHT_MAX = 0.9;
-const CONFETTI_ORIGIN_Y_OFFSET = -0.2;
 
 // Easing function for smooth animation from PR #2
 function easeOutCubic(t) {
@@ -91,7 +84,7 @@ function drawWheel() {
         ctx.textAlign = "center";
         ctx.fillStyle = "#fff";
         // Make certain labels slimmer
-        if (prizes[i] === "Free Soap Gift Basket" || prizes[i] === "Free Bath Salt") {
+        if (prizes[i] === "Free Soap from Basket" || prizes[i] === "Free Bath Salt") {
             ctx.font = "bold 9px Arial";
         } else {
             ctx.font = "bold 11px Arial";
@@ -131,43 +124,31 @@ function getPrizeIndex(finalAngle) {
     return 0; // Fallback
 }
 
-// Trigger confetti effect using canvas-confetti library from PR #2
-function triggerConfetti() {
-    // Check if confetti library is available
-    if (typeof confetti !== 'function') {
-        console.warn('Confetti library not loaded');
-        return;
-    }
-    
+// Christmas emoji rain animation
+function triggerChristmasEmojiRain() {
+    const emojis = ['🎄', '🎅', '⛄', '🎁', '❄️', '🔔', '⭐', '🕯️'];
     const duration = 3000;
-    const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-    function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
+    const emojiCount = 30;
+    
+    for (let i = 0; i < emojiCount; i++) {
+        setTimeout(() => {
+            const emoji = document.createElement('div');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.position = 'fixed';
+            emoji.style.left = Math.random() * 100 + '%';
+            emoji.style.top = '-50px';
+            emoji.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            emoji.style.zIndex = '9999';
+            emoji.style.pointerEvents = 'none';
+            emoji.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
+            
+            document.body.appendChild(emoji);
+            
+            setTimeout(() => {
+                emoji.remove();
+            }, 4000);
+        }, Math.random() * duration);
     }
-
-    const interval = setInterval(function() {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-            return clearInterval(interval);
-        }
-
-        const particleCount = 50 * (timeLeft / duration);
-        
-        // Launch confetti from two different positions
-        confetti({
-            ...defaults,
-            particleCount,
-            origin: { x: randomInRange(CONFETTI_ORIGIN_LEFT_MIN, CONFETTI_ORIGIN_LEFT_MAX), y: Math.random() + CONFETTI_ORIGIN_Y_OFFSET }
-        });
-        confetti({
-            ...defaults,
-            particleCount,
-            origin: { x: randomInRange(CONFETTI_ORIGIN_RIGHT_MIN, CONFETTI_ORIGIN_RIGHT_MAX), y: Math.random() + CONFETTI_ORIGIN_Y_OFFSET }
-        });
-    }, 250);
 }
 
 // Show prize modal from PR #3
@@ -206,10 +187,10 @@ function showPrizeModal(prize) {
     
     document.body.appendChild(modal);
     
-    // Trigger confetti only if not "Oops..." - with delay to avoid white oval during modal animation
+    // Trigger Christmas emoji rain only if not "Oops..." - with delay to avoid issues during modal animation
     if (prize !== "Oops...") {
         setTimeout(() => {
-            triggerConfetti();
+            triggerChristmasEmojiRain();
         }, 350);
     }
 }
