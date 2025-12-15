@@ -46,13 +46,9 @@ body {
 .flapper {
     position: absolute;
     top: 50%;
-    right: -10px;
+    right: -20px;
     transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-left: 16px solid #ff3333;
+    font-size: 40px;
     z-index: 10;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
@@ -202,10 +198,8 @@ button:disabled {
     }
     
     .flapper {
-        right: -8px;
-        border-top: 6px solid transparent;
-        border-bottom: 6px solid transparent;
-        border-left: 12px solid #ff3333;
+        right: -15px;
+        font-size: 30px;
     }
     
     button {
