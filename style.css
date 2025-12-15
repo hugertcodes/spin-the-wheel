@@ -63,6 +63,24 @@ body {
     }
 }
 
+@keyframes moveToCenter {
+    from {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+    to {
+        transform: translateX(-50%) translateY(calc(-50vh - 50px + 50%)) scale(2);
+    }
+}
+
+@keyframes pulseText {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
 @keyframes fall {
     to {
         top: 100vh;
@@ -178,24 +196,22 @@ button:disabled {
 
 /* Company link styles */
 .company-link {
-    margin-top: 30px;
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
-    transition: all 1s ease;
-    position: relative;
+    z-index: 1;
 }
 
 .company-link.enlarged {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(2);
-    margin-top: 0;
-    z-index: 5;
-    animation: bounce 1s ease-out forwards, pulseCenter 2s ease-in-out 1s infinite;
+    z-index: 10;
+    animation: moveToCenter 1s ease-out forwards;
 }
 
 .company-link.enlarged .link-text {
     font-size: 14px;
+    animation: pulseText 2s ease-in-out 1s infinite;
 }
 
 .company-link.enlarged .link-url {

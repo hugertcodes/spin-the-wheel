@@ -3,6 +3,7 @@ const spinButton = document.getElementById("spin-button");
 const spinAgainButton = document.getElementById("spin-again-button");
 const wheelContainer = document.querySelector(".wheel-container");
 const companyLink = document.querySelector(".company-link");
+const flapper = document.querySelector(".flapper");
 const ctx = wheel.getContext("2d");
 
 // Prize definitions - will be scrambled
@@ -107,6 +108,20 @@ function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
 }
 
+// Enhanced easing with dramatic deceleration at the end
+function easeOutWithDeceleration(t) {
+    // Use different easing for different phases
+    if (t < 0.8) {
+        // First 80%: Normal easeOutCubic
+        const normalizedT = t / 0.8;
+        return 0.85 * easeOutCubic(normalizedT);
+    } else {
+        // Last 20%: Slower deceleration for suspense
+        const normalizedT = (t - 0.8) / 0.2;
+        return 0.85 + 0.15 * (1 - Math.pow(1 - normalizedT, 4));
+    }
+}
+
 // Calculate slice angles based on weights
 function calculateSliceAngles() {
     const sliceAngles = [];
@@ -187,6 +202,40 @@ function getPrizeIndex(finalAngle) {
     }
     
     return 0; // Fallback
+}
+
+// Update flapper position to point at the exact midpoint of the selected slice
+function updateFlapperPosition(finalAngle) {
+    // Get the selected slice
+    const prizeIndex = getPrizeIndex(finalAngle);
+    const sliceAngles = calculateSliceAngles();
+    
+    // Calculate the midpoint angle of the selected slice
+    const sliceMidpoint = sliceAngles[prizeIndex].start + sliceAngles[prizeIndex].angle / 2;
+    
+    // Convert to degrees and adjust for wheel rotation
+    const normalizedAngle = ((finalAngle * Math.PI / 180) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    const flapperAngle = sliceMidpoint + normalizedAngle;
+    
+    // Calculate position on the wheel circumference
+    // The wheel has radius 250px and center at (250, 250)
+    // The flapper should be positioned at the edge of the wheel
+    const wheelRadius = 250;
+    const flapperDistance = wheelRadius + 20; // Position outside the wheel
+    
+    // Calculate x, y coordinates (0 degrees is at the right, 3 o'clock)
+    const x = 250 + flapperDistance * Math.cos(flapperAngle);
+    const y = 250 + flapperDistance * Math.sin(flapperAngle);
+    
+    // Convert to percentage relative to canvas
+    const canvasWidth = wheel.width;
+    const canvasHeight = wheel.height;
+    
+    // Calculate the percentage position relative to wheel container
+    const topPercent = (y / canvasHeight) * 100;
+    
+    // Update flapper position
+    flapper.style.top = `${topPercent}%`;
 }
 
 // Christmas emoji rain animation
@@ -299,7 +348,7 @@ spinButton.addEventListener("click", () => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
-        const easedProgress = easeOutCubic(progress);
+        const easedProgress = easeOutWithDeceleration(progress);
         angle = startAngle + totalRotation * easedProgress;
         
         ctx.clearRect(0, 0, wheel.width, wheel.height);
@@ -317,6 +366,9 @@ spinButton.addEventListener("click", () => {
             const prizeIndex = getPrizeIndex(angle);
             const wonPrize = prizes[prizeIndex];
             console.log(`You won: ${wonPrize}`);
+            
+            // Update flapper position to point at the slice midpoint
+            updateFlapperPosition(angle);
             
             // Show result with a slight delay
             setTimeout(() => {
@@ -350,7 +402,10 @@ spinAgainButton.addEventListener("click", () => {
     ctx.clearRect(0, 0, wheel.width, wheel.height);
     drawWheel();
     
-    // 5. Re-enable spin button
+    // 5. Reset flapper position
+    flapper.style.top = '52%';
+    
+    // 6. Re-enable spin button
     isSpinning = false;
     spinButton.disabled = false;
 });
