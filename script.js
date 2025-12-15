@@ -1,6 +1,7 @@
 const wheel = document.getElementById("wheel");
 const spinButton = document.getElementById("spin-button");
 const spinAgainButton = document.getElementById("spin-again-button");
+const onlinePurchaseLink = document.getElementById("online-purchase-link");
 const wheelContainer = document.querySelector(".wheel-container");
 const companyLink = document.querySelector(".company-link");
 const flapper = document.querySelector(".flapper");
@@ -303,9 +304,10 @@ function showPrizeModal(prize) {
         setTimeout(() => {
             companyLink.classList.add('enlarged');
             
-            // 3. After company link animation, show spin again button
+            // 3. After company link animation, show spin again button and online purchase link
             setTimeout(() => {
                 spinAgainButton.classList.add('visible');
+                onlinePurchaseLink.classList.add('visible');
             }, 1000); // Wait for company link animation to complete
         }, 1000); // Wait for wheel to fade out
     });
@@ -388,8 +390,9 @@ drawWheel();
 // Spin Again button handler
 spinAgainButton.addEventListener("click", () => {
     // Reset all states and animations
-    // 1. Hide spin again button
+    // 1. Hide spin again button and online purchase link
     spinAgainButton.classList.remove('visible');
+    onlinePurchaseLink.classList.remove('visible');
     
     // 2. Reset company link to original position
     companyLink.classList.remove('enlarged');
@@ -403,7 +406,7 @@ spinAgainButton.addEventListener("click", () => {
     drawWheel();
     
     // 5. Reset flapper position
-    flapper.style.top = '52%';
+    flapper.style.top = '50%';
     
     // 6. Re-enable spin button
     isSpinning = false;
