@@ -15,6 +15,12 @@ body {
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
+    transition: opacity 1s ease;
+}
+
+.wheel-container.hidden {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .welcome-text {
@@ -47,7 +53,7 @@ body {
     position: absolute;
     top: 50%;
     right: -20px;
-    transform: translateY(-65%);
+    transform: translateY(-50%);
     font-size: 40px;
     z-index: 10;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
@@ -153,6 +159,17 @@ button:disabled {
 .company-link {
     margin-top: 30px;
     text-align: center;
+    transition: all 1s ease;
+    position: relative;
+}
+
+.company-link.enlarged {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    margin-top: 0;
+    z-index: 5;
 }
 
 .link-text {
@@ -179,6 +196,23 @@ button:disabled {
     background: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Spin Again button styles */
+#spin-again-button {
+    position: fixed;
+    top: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    z-index: 10;
+}
+
+#spin-again-button.visible {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 /* Media queries for smaller screens */

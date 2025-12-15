@@ -1,5 +1,8 @@
 const wheel = document.getElementById("wheel");
 const spinButton = document.getElementById("spin-button");
+const spinAgainButton = document.getElementById("spin-again-button");
+const wheelContainer = document.querySelector(".wheel-container");
+const companyLink = document.querySelector(".company-link");
 const ctx = wheel.getContext("2d");
 
 // Prize definitions - will be scrambled
@@ -242,6 +245,20 @@ function showPrizeModal(prize) {
     closeButton.textContent = 'Close';
     closeButton.addEventListener('click', () => {
         modal.remove();
+        
+        // Start the animation sequence
+        // 1. Fade out the wheel container
+        wheelContainer.classList.add('hidden');
+        
+        // 2. After wheel fades out, enlarge and center the company link
+        setTimeout(() => {
+            companyLink.classList.add('enlarged');
+            
+            // 3. After company link animation, show spin again button
+            setTimeout(() => {
+                spinAgainButton.classList.add('visible');
+            }, 1000); // Wait for company link animation to complete
+        }, 1000); // Wait for wheel to fade out
     });
     
     modalContent.appendChild(heading);
@@ -315,3 +332,25 @@ spinButton.addEventListener("click", () => {
 
 // Initial wheel drawing
 drawWheel();
+
+// Spin Again button handler
+spinAgainButton.addEventListener("click", () => {
+    // Reset all states and animations
+    // 1. Hide spin again button
+    spinAgainButton.classList.remove('visible');
+    
+    // 2. Reset company link to original position
+    companyLink.classList.remove('enlarged');
+    
+    // 3. Show wheel container again
+    wheelContainer.classList.remove('hidden');
+    
+    // 4. Reset wheel rotation to original state
+    angle = 0;
+    ctx.clearRect(0, 0, wheel.width, wheel.height);
+    drawWheel();
+    
+    // 5. Re-enable spin button
+    isSpinning = false;
+    spinButton.disabled = false;
+});
