@@ -118,7 +118,7 @@ function getPrizeIndex(finalAngle) {
     // Get slice angles
     const sliceAngles = calculateSliceAngles();
     
-    // The flapper points at the right side (3 o'clock / 0 radians position)
+    // The flapper points at the right side (3 o'clock position, 0 radians in the canvas coordinate system)
     // Since the flapper is at 0 radians, we don't need the Math.PI/2 offset that was used for top position
     // Adjust for wheel rotation direction (counter-clockwise in our coordinate system)
     const flapperPosition = (2 * Math.PI - normalizedAngle) % (2 * Math.PI);
