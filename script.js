@@ -7,7 +7,7 @@ const prizes = [
     "Sugar Scrubs 50% OFF!",
     "Body Massage Oil 50% OFF!",
     "Jojoba Beard Balm 40% OFF!",
-    "Free Soap Gift Basket",
+    "Free Soap from Basket",
     "Hair Care 30% OFF!",
     "Bakuchiol Face Cream $20 OFF!",
     "Essential Oils 40% OFF!",
@@ -20,6 +20,17 @@ const prizes = [
     "Try Again🙁",
     "Free Bath Salt"
 ];
+
+// Define slice weight multipliers (slimmer slices have smaller values)
+const sliceWeights = prizes.map(prize => {
+    if (prize === "Free Soap Gift Basket" || prize === "Free Bath Salt") {
+        return 0.6; // 60% of normal size
+    }
+    return 1.0; // Normal size
+});
+
+// Calculate total weight for normalization
+const totalWeight = sliceWeights.reduce((sum, weight) => sum + weight, 0);
 
 const numberOfSlices = prizes.length;
 const sliceColors = ["#FF5733", "#33FF57", "#5733FF", "#F1C40F", "#1ABC9C", "#E74C3C", "#9B59B6", "#3498DB", "#FF6B9D", "#FFA500", "#20B2AA", "#9370DB"];
@@ -38,14 +49,34 @@ function easeOutCubic(t) {
     return 1 - Math.pow(1 - t, 3);
 }
 
+// Calculate slice angles based on weights
+function calculateSliceAngles() {
+    const sliceAngles = [];
+    let cumulativeAngle = 0;
+    
+    for (let i = 0; i < numberOfSlices; i++) {
+        const normalizedWeight = sliceWeights[i] / totalWeight;
+        const sliceAngle = normalizedWeight * 2 * Math.PI;
+        sliceAngles.push({
+            start: cumulativeAngle,
+            end: cumulativeAngle + sliceAngle,
+            angle: sliceAngle
+        });
+        cumulativeAngle += sliceAngle;
+    }
+    
+    return sliceAngles;
+}
+
 // Draw the wheel
 function drawWheel() {
-    const sliceAngle = (2 * Math.PI) / numberOfSlices;
+    const sliceAngles = calculateSliceAngles();
+    
     for (let i = 0; i < numberOfSlices; i++) {
         // Draw slice
         ctx.beginPath();
         ctx.moveTo(250, 250);
-        ctx.arc(250, 250, 250, sliceAngle * i, sliceAngle * (i + 1));
+        ctx.arc(250, 250, 250, sliceAngles[i].start, sliceAngles[i].end);
         ctx.closePath();
         ctx.fillStyle = sliceColors[i % sliceColors.length];
         ctx.fill();
@@ -56,7 +87,7 @@ function drawWheel() {
         // Draw text label
         ctx.save();
         ctx.translate(250, 250);
-        ctx.rotate(sliceAngle * i + sliceAngle / 2);
+        ctx.rotate(sliceAngles[i].start + sliceAngles[i].angle / 2);
         ctx.textAlign = "center";
         ctx.fillStyle = "#fff";
         // Make certain labels slimmer
@@ -81,19 +112,23 @@ function drawWheel() {
 
 // Calculate which prize was selected
 function getPrizeIndex(finalAngle) {
-    // Normalize angle to 0-360
-    const normalizedAngle = ((finalAngle % 360) + 360) % 360;
+    // Normalize angle to 0-2π radians
+    const normalizedAngle = ((finalAngle * Math.PI / 180) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
     
-    // The flapper points at the top (12 o'clock position)
-    // Calculate which slice is at the top
-    const sliceAngle = 360 / numberOfSlices;
+    // Get slice angles
+    const sliceAngles = calculateSliceAngles();
     
-    // Adjust for the rotation direction and flapper position
-    // The wheel rotates clockwise, so we need to find which slice is under the flapper
-    const adjustedAngle = (360 - normalizedAngle + (sliceAngle / 2)) % 360;
-    const prizeIndex = Math.floor(adjustedAngle / sliceAngle) % numberOfSlices;
+    // The flapper points at the top (0/12 o'clock position)
+    // Adjust for wheel rotation direction (counter-clockwise in our coordinate system)
+    const flapperPosition = (2 * Math.PI - normalizedAngle + Math.PI / 2) % (2 * Math.PI);
     
-    return prizeIndex;
+    for (let i = 0; i < numberOfSlices; i++) {
+        if (flapperPosition >= sliceAngles[i].start && flapperPosition < sliceAngles[i].end) {
+            return i;
+        }
+    }
+    
+    return 0; // Fallback
 }
 
 // Trigger confetti effect using canvas-confetti library from PR #2
@@ -137,9 +172,6 @@ function triggerConfetti() {
 
 // Show prize modal from PR #3
 function showPrizeModal(prize) {
-    // Trigger confetti effect first
-    triggerConfetti();
-    
     const modal = document.createElement('div');
     modal.id = 'prize-modal';
     
@@ -147,7 +179,12 @@ function showPrizeModal(prize) {
     modalContent.className = 'modal-content';
     
     const heading = document.createElement('h2');
-    heading.textContent = '🎉 Congratulations! 🎉';
+    // Check if the prize is "Oops..." for special message
+    if (prize === "Oops...") {
+        heading.textContent = '😦 Maybe Next Time🥺 😦';
+    } else {
+        heading.textContent = '🎉 Congratulations! 🎉';
+    }
     
     const text = document.createElement('p');
     text.textContent = 'You won:';
@@ -168,6 +205,13 @@ function showPrizeModal(prize) {
     modal.appendChild(modalContent);
     
     document.body.appendChild(modal);
+    
+    // Trigger confetti only if not "Oops..." - with slight delay to avoid white oval
+    if (prize !== "Oops...") {
+        setTimeout(() => {
+            triggerConfetti();
+        }, 100);
+    }
 }
 
 // Spin functionality with easing from PR #2 and prize display from PR #3
