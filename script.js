@@ -46,13 +46,13 @@ function scramblePrizes(prizesArray) {
         [otherPrizes[i], otherPrizes[j]] = [otherPrizes[j], otherPrizes[i]];
     }
     
-    // Place Free Bath Salt at a random position in the first half
-    const bathSaltPos = Math.floor(Math.random() * halfWay);
+    // Place Free Bath Salt at position 0 (right side, 3 o'clock, where flapper points)
+    // This corresponds to 0 degrees in the wheel coordinate system
+    const bathSaltPos = 0;
     
-    // Place Free Soap from Basket on the opposite side
-    // Opposite side means approximately halfWay positions away
-    // Use modulo to ensure it wraps within bounds
-    const soapBasketPos = (bathSaltPos + halfWay) % totalSlices;
+    // Place Free Soap from Basket on the opposite side (9 o'clock position)
+    // Opposite side means exactly halfWay positions away, which is 180 degrees
+    const soapBasketPos = halfWay;
     
     // Build the final array
     const scrambled = [];
@@ -205,7 +205,7 @@ function triggerChristmasEmojiRain() {
             emoji.style.left = Math.random() * 100 + '%';
             emoji.style.top = '-50px';
             emoji.style.fontSize = (Math.random() * 20 + 20) + 'px';
-            emoji.style.zIndex = '9999';
+            emoji.style.zIndex = '10001';
             emoji.style.pointerEvents = 'none';
             emoji.style.animation = `fall ${Math.random() * 2 + 2}s linear forwards`;
             
