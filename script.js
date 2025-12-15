@@ -31,6 +31,12 @@ function scramblePrizes(prizesArray) {
     const soapBasket = "Free Soap from Basket";
     const otherPrizes = prizesArray.filter(p => p !== bathSalt && p !== soapBasket);
     
+    // Verify we have the expected prizes
+    if (otherPrizes.length !== totalSlices - 2) {
+        console.error("Warning: Special prizes not found in array");
+        return prizesArray; // Return original array if something is wrong
+    }
+    
     // Shuffle the other prizes using Fisher-Yates algorithm
     for (let i = otherPrizes.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -42,7 +48,8 @@ function scramblePrizes(prizesArray) {
     
     // Place Free Soap from Basket on the opposite side
     // Opposite side means approximately halfWay positions away
-    const soapBasketPos = bathSaltPos + halfWay;
+    // Use modulo to ensure it wraps within bounds
+    const soapBasketPos = (bathSaltPos + halfWay) % totalSlices;
     
     // Build the final array
     const scrambled = [];
@@ -54,8 +61,10 @@ function scramblePrizes(prizesArray) {
         } else if (i === soapBasketPos) {
             scrambled.push(soapBasket);
         } else {
-            scrambled.push(otherPrizes[otherIndex]);
-            otherIndex++;
+            if (otherIndex < otherPrizes.length) {
+                scrambled.push(otherPrizes[otherIndex]);
+                otherIndex++;
+            }
         }
     }
     
