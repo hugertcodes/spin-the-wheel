@@ -7,7 +7,7 @@ const prizes = [
     "Sugar Scrubs 50% OFF!",
     "Body Massage Oil 50% OFF!",
     "Jojoba Beard Balm 40% OFF!",
-    "Free Soap Gift Basket",
+    "Free Soap from Basket",
     "Hair Care 30% OFF!",
     "Bakuchiol Face Cream $20 OFF!",
     "Essential Oils 40% OFF!",
@@ -181,7 +181,7 @@ function showPrizeModal(prize) {
     const heading = document.createElement('h2');
     // Check if the prize is "Oops..." for special message
     if (prize === "Oops...") {
-        heading.textContent = '😦 Maybe Next🥺 😦';
+        heading.textContent = '😦 Maybe Next Time🥺 😦';
     } else {
         heading.textContent = '🎉 Congratulations! 🎉';
     }
