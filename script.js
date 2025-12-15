@@ -330,7 +330,7 @@ function showPrizeModal(prize) {
 
 // Spin functionality with easing from PR #2 and prize display from PR #3
 spinButton.addEventListener("click", () => {
-    if (isSpinning) return;
+    if (isSpinning || spinButton.disabled) return;
     
     isSpinning = true;
     spinButton.disabled = true;
@@ -368,9 +368,6 @@ spinButton.addEventListener("click", () => {
             const prizeIndex = getPrizeIndex(angle);
             const wonPrize = prizes[prizeIndex];
             console.log(`You won: ${wonPrize}`);
-            
-            // Update flapper position to point at the slice midpoint
-            updateFlapperPosition(angle);
             
             // Show result with a slight delay
             setTimeout(() => {
