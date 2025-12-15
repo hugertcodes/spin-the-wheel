@@ -61,6 +61,11 @@ function scramblePrizes(prizesArray) {
         } else if (i === soapBasketPos) {
             scrambled.push(soapBasket);
         } else {
+            // Safety check: ensure we don't exceed array bounds
+            if (otherIndex >= otherPrizes.length) {
+                console.error(`Error: otherIndex ${otherIndex} exceeds array length ${otherPrizes.length}`);
+                return prizesArray;
+            }
             scrambled.push(otherPrizes[otherIndex]);
             otherIndex++;
         }
